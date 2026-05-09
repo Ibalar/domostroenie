@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -18,6 +19,7 @@ class Service extends Model
         'description',
         'full_text',
         'parent_id',
+        'category_id',
         'sort_order',
         'image',
         'is_published',
@@ -40,10 +42,23 @@ class Service extends Model
         return $this->belongsTo(Service::class, 'parent_id');
     }
 
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(ServiceCategory::class, 'category_id');
+    }
+
     // Дочерние услуги
     public function children(): HasMany
     {
         return $this->hasMany(Service::class, 'parent_id')->orderBy('sort_order');
+    }
+
+    public function blocks(): BelongsToMany
+    {
+        return $this->belongsToMany(Block::class, 'service_block')
+            ->withPivot('sort_order', 'title', 'content', 'image', 'link')
+            ->withTimestamps()
+            ->orderBy('service_block.sort_order');
     }
 
     // Рекурсивное получение всех дочерних элементов

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Block extends Model
 {
@@ -27,6 +28,13 @@ class Block extends Model
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
+    }
+
+    public function services(): BelongsToMany
+    {
+        return $this->belongsToMany(Service::class, 'service_block')
+            ->withPivot('sort_order')
+            ->withTimestamps();
     }
 
     // Полный URL изображения

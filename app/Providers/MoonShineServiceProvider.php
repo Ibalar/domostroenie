@@ -12,12 +12,15 @@ use App\MoonShine\Resources\MoonShineUser\MoonShineUserResource;
 use App\MoonShine\Resources\MoonShineUserRole\MoonShineUserRoleResource;
 use App\MoonShine\Resources\Page\PageResource;
 use App\MoonShine\Resources\Service\ServiceResource;
+use App\MoonShine\Resources\ServiceCategory\ServiceCategoryResource;
 use App\MoonShine\Resources\ProjectCategory\ProjectCategoryResource;
 use App\MoonShine\Resources\Project\ProjectResource;
 use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
 use App\MoonShine\Resources\Block\BlockResource;
 use App\MoonShine\Resources\Setting\SettingResource;
+use App\MoonShine\Resources\HeroSection\HeroSectionResource;
 use App\MoonShine\Resources\Lead\LeadResource;
+use App\MoonShine\Pages\HeaderSettings\HeaderSettingsPage;
 
 class MoonShineServiceProvider extends ServiceProvider
 {
@@ -30,8 +33,10 @@ class MoonShineServiceProvider extends ServiceProvider
             ->resources([
                 MoonShineUserResource::class,
                 MoonShineUserRoleResource::class,
+                HeroSectionResource::class,
                 PageResource::class,
                 ServiceResource::class,
+                ServiceCategoryResource::class,
                 ProjectCategoryResource::class,
                 ProjectResource::class,
                 ProjectImageResource::class,
@@ -41,6 +46,7 @@ class MoonShineServiceProvider extends ServiceProvider
             ])
             ->pages([
                 ...$core->getConfig()->getPages(),
+                HeaderSettingsPage::class,
             ])
         ;
     }

@@ -11,6 +11,10 @@ use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Service\ServiceResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use Throwable;
 
 
@@ -26,6 +30,12 @@ class ServiceDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Заголовок', 'title'),
+            Text::make('Slug', 'slug'),
+            Textarea::make('Описание', 'description'),
+            Text::make('Категория', 'category.title'),
+            Number::make('Сортировка', 'sort_order'),
+            Switcher::make('Опубликовано', 'is_published'),
         ];
     }
 

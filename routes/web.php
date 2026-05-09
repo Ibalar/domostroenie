@@ -1,7 +1,15 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\MoonShine\HeaderSettingsController;
+use MoonShine\Laravel\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/services/{service:slug}', [ServiceController::class, 'show'])->name('services.show');
+
+// Маршрут для сохранения настроек шапки (защищён аутентификацией MoonShine)
+Route::post('admin/header-settings/save', [HeaderSettingsController::class, 'save'])
+    ->middleware(Authenticate::class)
+    ->name('header-settings.save');

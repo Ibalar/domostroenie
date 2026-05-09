@@ -11,6 +11,9 @@ use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
 use App\MoonShine\Resources\Service\ServiceResource;
 use MoonShine\Support\ListOf;
 use Throwable;
@@ -30,6 +33,11 @@ class ServiceIndexPage extends IndexPage
     {
         return [
             ID::make(),
+            Text::make('Заголовок', 'title')->sortable(),
+            Text::make('Slug', 'slug')->sortable(),
+            Text::make('Категория', 'category.title'),
+            Number::make('Сортировка', 'sort_order')->sortable(),
+            Switcher::make('Опубликовано', 'is_published')->sortable(),
         ];
     }
 
