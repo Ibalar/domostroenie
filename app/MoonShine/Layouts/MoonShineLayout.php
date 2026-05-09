@@ -9,6 +9,9 @@ use App\MoonShine\Resources\HeroSection\HeroSectionResource;
 use App\MoonShine\Pages\HeaderSettings\HeaderSettingsPage;
 use App\MoonShine\Resources\Lead\LeadResource;
 use App\MoonShine\Resources\Page\PageResource;
+use App\MoonShine\Resources\Portfolio\PortfolioResource;
+use App\MoonShine\Resources\PortfolioImage\PortfolioImageResource;
+use App\MoonShine\Resources\PortfolioSection\PortfolioSectionResource;
 use App\MoonShine\Resources\Project\ProjectResource;
 use App\MoonShine\Resources\ProjectCategory\ProjectCategoryResource;
 use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
@@ -25,9 +28,6 @@ use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
 {
-    /**
-     * @var null|class-string<PaletteContract>
-     */
     protected ?string $palette = PurplePalette::class;
 
     protected function assets(): array
@@ -50,6 +50,11 @@ final class MoonShineLayout extends AppLayout
                 MenuItem::make(ProjectResource::class, 'Проекты'),
                 MenuItem::make(ProjectImageResource::class, 'Изображения проектов'),
             ])->icon('building-library'),
+            MenuGroup::make('Портфолио', [
+                MenuItem::make(PortfolioResource::class, 'Работы'),
+                MenuItem::make(PortfolioImageResource::class, 'Изображения'),
+                MenuItem::make(PortfolioSectionResource::class, 'Секции'),
+            ])->icon('photo'),
             MenuItem::make(PageResource::class, 'Информационные страницы')->icon('book-open'),
             MenuGroup::make('Настройки сайта', [
                 MenuItem::make(HeroSectionResource::class, 'Главный экран'),
@@ -61,13 +66,8 @@ final class MoonShineLayout extends AppLayout
         ];
     }
 
-    /**
-     * @param ColorManager $colorManager
-     */
     protected function colors(ColorManagerContract $colorManager): void
     {
         parent::colors($colorManager);
-
-        // $colorManager->primary('#00000');
     }
 }

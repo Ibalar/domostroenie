@@ -16,6 +16,9 @@ use App\MoonShine\Resources\ServiceCategory\ServiceCategoryResource;
 use App\MoonShine\Resources\ProjectCategory\ProjectCategoryResource;
 use App\MoonShine\Resources\Project\ProjectResource;
 use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
+use App\MoonShine\Resources\Portfolio\PortfolioResource;
+use App\MoonShine\Resources\PortfolioImage\PortfolioImageResource;
+use App\MoonShine\Resources\PortfolioSection\PortfolioSectionResource;
 use App\MoonShine\Resources\Block\BlockResource;
 use App\MoonShine\Resources\Setting\SettingResource;
 use App\MoonShine\Resources\HeroSection\HeroSectionResource;
@@ -40,6 +43,9 @@ class MoonShineServiceProvider extends ServiceProvider
                 ProjectCategoryResource::class,
                 ProjectResource::class,
                 ProjectImageResource::class,
+                PortfolioResource::class,
+                PortfolioImageResource::class,
+                PortfolioSectionResource::class,
                 BlockResource::class,
                 SettingResource::class,
                 LeadResource::class,

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Project extends Model
 {
@@ -42,42 +43,41 @@ class Project extends Model
         'is_published' => 'boolean',
     ];
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }
 
-    // Категория проекта
     public function category(): BelongsTo
     {
         return $this->belongsTo(ProjectCategory::class, 'category_id');
     }
 
-    // Изображения проекта
     public function images(): HasMany
     {
         return $this->hasMany(ProjectImage::class)->orderBy('sort_order');
     }
 
-    // Основное изображение (отношение)
     public function mainImage()
     {
         return $this->hasOne(ProjectImage::class)->where('sort_order', 0)->orWhereNull('sort_order');
     }
 
-    // Scope для опубликованных
+    public function portfolio(): HasOne
+    {
+        return $this->hasOne(Portfolio::class);
+    }
+
     public function scopePublished($query)
     {
         return $query->where('is_published', true);
     }
 
-    // Scope для избранных
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
     }
 
-    // Scope для домов
     public function scopeHouses($query)
     {
         return $query->whereHas('category', function ($q) {
@@ -85,7 +85,6 @@ class Project extends Model
         });
     }
 
-    // Scope для бань
     public function scopeSaunas($query)
     {
         return $query->whereHas('category', function ($q) {
@@ -93,7 +92,6 @@ class Project extends Model
         });
     }
 
-    // Форматированная цена
     public function getFormattedPriceAttribute(): string
     {
         if ($this->price_from && $this->price_to) {

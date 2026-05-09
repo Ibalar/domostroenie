@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources\Project\Pages;
+namespace App\MoonShine\Resources\Portfolio\Pages;
 
 use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Contracts\UI\FieldContract;
@@ -10,12 +10,12 @@ use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Switcher;
 use MoonShine\UI\Fields\Text;
-use App\MoonShine\Resources\Project\ProjectResource;
+use App\MoonShine\Resources\Portfolio\PortfolioResource;
 
 /**
- * @extends IndexPage<ProjectResource>
+ * @extends IndexPage<PortfolioResource>
  */
-class ProjectIndexPage extends IndexPage
+class PortfolioIndexPage extends IndexPage
 {
     protected bool $isLazy = true;
 
@@ -25,11 +25,9 @@ class ProjectIndexPage extends IndexPage
             ID::make(),
             Text::make('Название', 'title')->sortable(),
             Text::make('Slug', 'slug')->sortable(),
-            Text::make('Категория', 'category.name')->sortable(),
-            Number::make('Цена от', 'price_from')->sortable(),
-            Number::make('Площадь', 'area')->sortable(),
+            Text::make('Проект', 'project.title')->sortable(),
             Number::make('Этажей', 'floors')->sortable(),
-            Switcher::make('Рекомендуемый', 'is_featured')->sortable(),
+            Text::make('Срок реализации', 'implementation_period')->sortable(),
             Switcher::make('Опубликован', 'is_published')->sortable(),
             Number::make('Сортировка', 'sort_order')->sortable(),
         ];

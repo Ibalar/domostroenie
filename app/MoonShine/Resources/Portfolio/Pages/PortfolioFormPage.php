@@ -2,15 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\MoonShine\Resources\Project\Pages;
+namespace App\MoonShine\Resources\Portfolio\Pages;
 
-use App\MoonShine\Resources\Project\ProjectResource;
-use App\MoonShine\Resources\ProjectCategory\ProjectCategoryResource;
-use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
 use App\MoonShine\Resources\Portfolio\PortfolioResource;
+use App\MoonShine\Resources\PortfolioSection\PortfolioSectionResource;
+use App\MoonShine\Resources\Project\ProjectResource;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Contracts\UI\FormBuilderContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Fields\Slug;
@@ -27,9 +25,9 @@ use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
 
 /**
- * @extends FormPage<ProjectResource>
+ * @extends FormPage<PortfolioResource>
  */
-class ProjectFormPage extends FormPage
+class PortfolioFormPage extends FormPage
 {
     protected function fields(): iterable
     {
@@ -52,46 +50,53 @@ class ProjectFormPage extends FormPage
                         fn(Slug $field) => $field->readonly()
                     ),
                 Textarea::make('Описание', 'description')->nullable(),
-                BelongsTo::make('Категория', 'category', resource: ProjectCategoryResource::class)
-                    ->required()
+                BelongsTo::make('Проект (необязательно)', 'project', resource: ProjectResource::class)
+                    ->nullable()
                     ->searchable(),
             ]),
 
             Box::make('Характеристики', [
                 Grid::make([
                     Column::make([
-                        Number::make('Цена от', 'price_from')->nullable()->step(0.01)->min(0),
-                        Number::make('Площадь', 'area')->nullable()->step(0.01)->min(0),
-                        Number::make('Спален', 'bedrooms')->min(0)->step(1)->default(0),
-                        Checkbox::make('Есть гараж', 'has_garage')->default(false),
+                        Number::make('Этажность', 'floors')->min(1)->step(1)->default(1),
+                        Text::make('Срок реализации', 'implementation_period')
+                            ->nullable()
+                            ->hint('Например: 2 года 6 месяцев'),
                     ])->columnSpan(6),
                     Column::make([
-                        Number::make('Цена до', 'price_to')->nullable()->step(0.01)->min(0),
-                        Number::make('Этажей', 'floors')->min(1)->step(1)->default(1),
-                        Number::make('Санузлов', 'bathrooms')->min(0)->step(1)->default(0),
-                        Text::make('Тип крыши', 'roof_type')->nullable(),
+                        Number::make('Площадь (м²)', 'area')->nullable()->step(0.01)->min(0),
+                        Text::make('Стоимость строительства', 'cost_text')
+                            ->nullable()
+                            ->hint('Например: 3 234 325 BYN'),
                     ])->columnSpan(6),
                 ]),
-                Text::make('Стиль', 'style')->nullable(),
             ]),
 
             Box::make('Изображения', [
-                File::make('Основное изображение', 'main_image')
+                File::make('Главное изображение', 'main_image')
                     ->nullable()
                     ->disk('public')
-                    ->dir('projects')
+                    ->dir('portfolio')
                     ->allowedExtensions(['jpg', 'jpeg', 'png', 'gif', 'webp']),
-                HasMany::make('Галерея проекта', 'images', resource: ProjectImageResource::class)
+                Image::make('Фотогалерея', 'gallery')
+                    ->disk('public')
+                    ->dir('portfolio/gallery')
+                    ->allowedExtensions(['jpg', 'jpeg', 'png', 'gif', 'webp'])
+                    ->multiple()
+                    ->removable(),
+            ]),
+
+            Box::make('Секции (подробности)', [
+                HasMany::make('Секции', 'sections', resource: PortfolioSectionResource::class)
                     ->fields([
-                        Image::make('Изображение', 'image_path'),
+                        Text::make('Заголовок', 'title'),
+                        Textarea::make('Описание', 'description'),
                         Number::make('Сортировка', 'sort_order'),
                     ])
                     ->creatable(),
             ]),
 
             Box::make('Настройки', [
-                Text::make('Внешний ID', 'external_id')->nullable(),
-                Checkbox::make('Рекомендуемый', 'is_featured')->default(false),
                 Checkbox::make('Опубликован', 'is_published')->default(true),
                 Number::make('Сортировка', 'sort_order')->min(0)->step(1)->default(0),
             ]),
@@ -104,31 +109,15 @@ class ProjectFormPage extends FormPage
 
         return [
             'title' => ['required', 'string', 'max:255'],
-            'slug' => [
-                'required',
-                'string',
-                'max:255',
-                'unique:projects,slug' . ($id ? ',' . $id : ''),
-            ],
+            'slug' => ['required', 'string', 'max:255', 'unique:portfolios,slug' . ($id ? ',' . $id : '')],
             'description' => ['nullable', 'string'],
-            'category_id' => ['required', 'exists:project_categories,id'],
-            'price_from' => ['nullable', 'numeric', 'min:0'],
-            'price_to' => ['nullable', 'numeric', 'min:0'],
-            'area' => ['nullable', 'numeric', 'min:0'],
-            'floors' => ['required', 'integer', 'min:1'],
-            'bedrooms' => ['required', 'integer', 'min:0'],
-            'bathrooms' => ['required', 'integer', 'min:0'],
-            'has_garage' => ['nullable', 'boolean'],
-            'roof_type' => ['nullable', 'string', 'max:255'],
-            'style' => ['nullable', 'string', 'max:255'],
+            'project_id' => ['nullable', 'exists:projects,id'],
             'main_image' => ['nullable', 'string', 'max:255'],
-            'external_id' => [
-                'nullable',
-                'string',
-                'max:255',
-                'unique:projects,external_id' . ($id ? ',' . $id : ''),
-            ],
-            'is_featured' => ['nullable', 'boolean'],
+            'gallery' => ['nullable', 'array'],
+            'floors' => ['nullable', 'integer', 'min:1'],
+            'area' => ['nullable', 'numeric', 'min:0'],
+            'implementation_period' => ['nullable', 'string', 'max:255'],
+            'cost_text' => ['nullable', 'string', 'max:255'],
             'is_published' => ['nullable', 'boolean'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ];
