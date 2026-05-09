@@ -11,6 +11,9 @@ use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -26,6 +29,11 @@ class ProjectImageDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Проект', 'project.title'),
+            Image::make('Изображение', 'image_path'),
+            Number::make('Сортировка', 'sort_order'),
+            Text::make('Создано', 'created_at'),
+            Text::make('Обновлено', 'updated_at'),
         ];
     }
 

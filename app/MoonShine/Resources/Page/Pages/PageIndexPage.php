@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Page\Pages;
 
-use MoonShine\Laravel\Pages\Crud\IndexPage;
+use App\MoonShine\Resources\Page\PageResource;
 use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\IndexPage;
 use MoonShine\Laravel\QueryTags\QueryTag;
+use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
-use App\MoonShine\Resources\Page\PageResource;
-use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
 use Throwable;
-
 
 /**
  * @extends IndexPage<PageResource>
@@ -30,20 +30,21 @@ class PageIndexPage extends IndexPage
     {
         return [
             ID::make(),
+            Text::make('Название', 'title')->sortable(),
+            Text::make('Slug', 'slug')->sortable(),
+            Text::make('Родитель', 'parent.title'),
+            Text::make('Meta title', 'meta_title'),
+            Switcher::make('Активна', 'is_active')->sortable(),
+            Switcher::make('В меню хедера', 'show_in_menu')->sortable(),
+            Text::make('Создано', 'created_at')->sortable(),
         ];
     }
 
-    /**
-     * @return ListOf<ActionButtonContract>
-     */
     protected function buttons(): ListOf
     {
         return parent::buttons();
     }
 
-    /**
-     * @return list<FieldContract>
-     */
     protected function filters(): iterable
     {
         return [];
@@ -65,11 +66,6 @@ class PageIndexPage extends IndexPage
         return [];
     }
 
-    /**
-     * @param  TableBuilder  $component
-     *
-     * @return TableBuilder
-     */
     protected function modifyListComponent(ComponentContract $component): ComponentContract
     {
         return $component;

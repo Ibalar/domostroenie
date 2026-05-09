@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\Page\Pages;
 
-use MoonShine\Laravel\Pages\Crud\DetailPage;
-use MoonShine\Contracts\UI\ComponentContract;
-use MoonShine\UI\Components\Table\TableBuilder;
-use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\Page\PageResource;
+use MoonShine\Contracts\UI\ComponentContract;
+use MoonShine\Contracts\UI\FieldContract;
+use MoonShine\Laravel\Pages\Crud\DetailPage;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Switcher;
+use MoonShine\UI\Fields\Text;
+use MoonShine\UI\Fields\Textarea;
 use Throwable;
-
 
 /**
  * @extends DetailPage<PageResource>
@@ -26,6 +27,16 @@ class PageDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Название', 'title'),
+            Text::make('Slug', 'slug'),
+            Text::make('Родитель', 'parent.title'),
+            Textarea::make('Контент', 'content'),
+            Text::make('Meta title', 'meta_title'),
+            Textarea::make('Meta description', 'meta_description'),
+            Switcher::make('Активна', 'is_active'),
+            Switcher::make('В меню хедера', 'show_in_menu'),
+            Text::make('Создано', 'created_at'),
+            Text::make('Обновлено', 'updated_at'),
         ];
     }
 
@@ -34,11 +45,6 @@ class PageDetailPage extends DetailPage
         return parent::buttons();
     }
 
-    /**
-     * @param  TableBuilder  $component
-     *
-     * @return TableBuilder
-     */
     protected function modifyDetailComponent(ComponentContract $component): ComponentContract
     {
         return $component;

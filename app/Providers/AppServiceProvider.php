@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Page;
 use App\Models\ServiceCategory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
@@ -30,7 +31,16 @@ class AppServiceProvider extends ServiceProvider
                 ->with(['allVisibleChildren', 'menuServices'])
                 ->get();
 
+            $menuPages = Page::query()
+                ->where('is_active', true)
+                ->where('show_in_menu', true)
+                ->whereNull('parent_id')
+                ->orderBy('title')
+                ->with('allVisibleChildren')
+                ->get();
+
             $view->with('menuServiceCategories', $menuServiceCategories);
+            $view->with('menuPages', $menuPages);
         });
     }
 }

@@ -925,6 +925,15 @@ body {
 	gap: 4px;
 }
 
+@media (min-width: 992px) {
+	.header-top-phones {
+		flex-direction: row;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 16px;
+	}
+}
+
 .header-phone-info {
 	display: flex;
 	flex-direction: column;

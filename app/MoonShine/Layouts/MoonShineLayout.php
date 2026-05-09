@@ -20,6 +20,7 @@ use MoonShine\ColorManager\Palettes\PurplePalette;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;
 use MoonShine\Contracts\ColorManager\PaletteContract;
 use MoonShine\Laravel\Layouts\AppLayout;
+use MoonShine\MenuManager\MenuGroup;
 use MoonShine\MenuManager\MenuItem;
 
 final class MoonShineLayout extends AppLayout
@@ -39,18 +40,24 @@ final class MoonShineLayout extends AppLayout
     protected function menu(): array
     {
         return [
+            MenuGroup::make('Услуги', [
+                MenuItem::make(ServiceCategoryResource::class, 'Категории услуг'),
+                MenuItem::make(ServiceResource::class, 'Услуги'),
+                MenuItem::make(BlockResource::class, 'Структурные блоки'),
+            ])->icon('squares-plus'),
+            MenuGroup::make('Готовые проекты', [
+                MenuItem::make(ProjectCategoryResource::class, 'Категории проектов'),
+                MenuItem::make(ProjectResource::class, 'Проекты'),
+                MenuItem::make(ProjectImageResource::class, 'Изображения проектов'),
+            ])->icon('building-library'),
+            MenuItem::make(PageResource::class, 'Информационные страницы')->icon('book-open'),
+            MenuGroup::make('Настройки сайта', [
+                MenuItem::make(HeroSectionResource::class, 'Главный экран'),
+                MenuItem::make(fn() => toPage(page: HeaderSettingsPage::class), 'Контакты в шапке сайта'),
+            ])->icon('table-cells'),
+            MenuItem::make(LeadResource::class, 'Заявки')->icon('chat-bubble-left-right'),
+            MenuItem::make(SettingResource::class, 'Настройки')->icon('cog-8-tooth'),
             ...parent::menu(),
-            MenuItem::make(HeroSectionResource::class, 'Главный экран'),
-            MenuItem::make(fn() => toPage(page: HeaderSettingsPage::class), 'Настройки шапки')->icon('bars-3'),
-            MenuItem::make(PageResource::class, 'Pages'),
-            MenuItem::make(ServiceResource::class, 'Услуги'),
-            MenuItem::make(ServiceCategoryResource::class, 'Категории услуг'),
-            MenuItem::make(ProjectCategoryResource::class, 'ProjectCategories'),
-            MenuItem::make(ProjectResource::class, 'Projects'),
-            MenuItem::make(ProjectImageResource::class, 'ProjectImages'),
-            MenuItem::make(BlockResource::class, 'Blocks'),
-            MenuItem::make(SettingResource::class, 'Settings'),
-            MenuItem::make(LeadResource::class, 'Leads'),
         ];
     }
 

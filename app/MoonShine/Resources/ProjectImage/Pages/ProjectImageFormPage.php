@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\MoonShine\Resources\ProjectImage\Pages;
 
+use App\MoonShine\Resources\Project\ProjectResource;
+use MoonShine\Laravel\Fields\Relationships\BelongsTo;
 use MoonShine\Laravel\Pages\Crud\FormPage;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FormBuilderContract;
@@ -12,8 +14,10 @@ use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Contracts\Core\TypeCasts\DataWrapperContract;
 use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
 use MoonShine\Support\ListOf;
+use MoonShine\UI\Fields\File;
 use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Components\Layout\Box;
+use MoonShine\UI\Fields\Number;
 use Throwable;
 
 
@@ -30,6 +34,18 @@ class ProjectImageFormPage extends FormPage
         return [
             Box::make([
                 ID::make(),
+                BelongsTo::make('Проект', 'project', resource: ProjectResource::class)
+                    ->required()
+                    ->searchable(),
+                File::make('Изображение', 'image_path')
+                    ->required()
+                    ->disk('public')
+                    ->dir('projects/gallery')
+                    ->allowedExtensions(['jpg', 'jpeg', 'png', 'gif', 'webp']),
+                Number::make('Сортировка', 'sort_order')
+                    ->min(0)
+                    ->step(1)
+                    ->default(0),
             ]),
         ];
     }
@@ -46,7 +62,11 @@ class ProjectImageFormPage extends FormPage
 
     protected function rules(DataWrapperContract $item): array
     {
-        return [];
+        return [
+            'project_id' => ['required', 'exists:projects,id'],
+            'image_path' => ['required', 'string', 'max:255'],
+            'sort_order' => ['nullable', 'integer', 'min:0'],
+        ];
     }
 
     /**

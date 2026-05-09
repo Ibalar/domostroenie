@@ -11,6 +11,8 @@ use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Text;
 use App\MoonShine\Resources\ProjectCategory\ProjectCategoryResource;
 use MoonShine\Support\ListOf;
 use Throwable;
@@ -30,6 +32,11 @@ class ProjectCategoryIndexPage extends IndexPage
     {
         return [
             ID::make(),
+            Text::make('Название', 'name')->sortable(),
+            Text::make('Slug', 'slug')->sortable(),
+            Text::make('Тип', 'type')->sortable(),
+            Number::make('Сортировка', 'sort_order')->sortable(),
+            Text::make('Создано', 'created_at')->sortable(),
         ];
     }
 

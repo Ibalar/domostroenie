@@ -11,6 +11,9 @@ use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\QueryTags\QueryTag;
 use MoonShine\UI\Components\Metrics\Wrapped\Metric;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Image;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Text;
 use App\MoonShine\Resources\ProjectImage\ProjectImageResource;
 use MoonShine\Support\ListOf;
 use Throwable;
@@ -30,6 +33,10 @@ class ProjectImageIndexPage extends IndexPage
     {
         return [
             ID::make(),
+            Text::make('Проект', 'project.title')->sortable(),
+            Image::make('Изображение', 'image_path'),
+            Number::make('Сортировка', 'sort_order')->sortable(),
+            Text::make('Создано', 'created_at')->sortable(),
         ];
     }
 

@@ -11,6 +11,8 @@ use MoonShine\Contracts\UI\FieldContract;
 use App\MoonShine\Resources\ProjectCategory\ProjectCategoryResource;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\ID;
+use MoonShine\UI\Fields\Number;
+use MoonShine\UI\Fields\Text;
 use Throwable;
 
 
@@ -26,6 +28,12 @@ class ProjectCategoryDetailPage extends DetailPage
     {
         return [
             ID::make(),
+            Text::make('Название', 'name'),
+            Text::make('Slug', 'slug'),
+            Text::make('Тип', 'type'),
+            Number::make('Сортировка', 'sort_order'),
+            Text::make('Создано', 'created_at'),
+            Text::make('Обновлено', 'updated_at'),
         ];
     }
 

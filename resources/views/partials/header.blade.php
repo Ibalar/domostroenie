@@ -66,8 +66,10 @@
                                 @foreach(($menuServiceCategories ?? collect()) as $category)
                                     @include('partials.menu.service-category-item', ['category' => $category, 'depth' => 0])
                                 @endforeach
+                                @foreach(($menuPages ?? collect()) as $page)
+                                    @include('partials.menu.page-item', ['page' => $page, 'depth' => 0])
+                                @endforeach
                                 <li class="nav-item submenu"><a class="nav-link" href="#">Property</a></li>
-                                <li class="nav-item submenu"><a class="nav-link" href="#">Pages</a></li>
                                 <li class="nav-item submenu"><a class="nav-link" href="#">Blogs</a></li>
                                 <li class="nav-item submenu"><a class="nav-link" href="#">Contact</a></li>
                             </ul>
